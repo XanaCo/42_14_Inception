@@ -1,4 +1,6 @@
 composer.phar
 /vendor/
+
+#System files
 **/.DS_Store
 **/.vscode
