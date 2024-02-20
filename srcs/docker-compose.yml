@@ -1,0 +1,21 @@
+version: "1.0"
+
+#List of Containers
+services:
+  mariadb:
+    container_name: mariadb
+    image: mariadb:42
+    init: true
+    build:
+      context: #where to build folder
+      dockerfile: Dockerfile
+      args:
+        - #args from .env
+    networks:
+      - #?
+    volumes:
+      - mariadb:/var/lib/mysql
+    restart: always
+
+  wordpress:
+
