@@ -1,21 +1,81 @@
-version: "1.0"
 
-#List of Containers
+version: "1.1"
+
+#Custom Network
+networks:
+  inception:
+  name: inception
+  driver: bridge #containers connected can communicate with each other
+
+#List of Volumes
+volumes:
+  mariadb:
+    name: mariadb
+    external: true 
+    device: /home/ancolmen/data/mariadb
+  wordpress:
+    name: wordpress
+    external: true
+    device: /home/ancolmen/data/wordpress
+
+#Containers (Mandatory)
 services:
+  nginx:
+    container_name: nginx
+    image: nginx:42
+    init: true
+    build:
+      context: requirements/nginx
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    networks:
+      - inception
+    ports:
+      - "443:443"
+    volumes:
+      - wordpress:/var/www/html
+    depends_on:
+      - wordpress
+      - mariadb
+    restart: always
+
   mariadb:
     container_name: mariadb
     image: mariadb:42
     init: true
     build:
-      context: #where to build folder
+      context: requirements/mariadb
       dockerfile: Dockerfile
-      args:
-        - #args from .env
+    env_file:
+      - .env
     networks:
-      - #?
+      - inception
     volumes:
       - mariadb:/var/lib/mysql
     restart: always
 
   wordpress:
+    container_name: wordpress
+    image: wordpress:42
+    init: true
+    build:
+      context: requirements/wordpress
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    networks:
+      - inception
+    volumes:
+      - wordpress:/var/www/html
+    depends_on:
+      - mariadb
+    restart: always
 
+#Containers (Bonus)
+
+#redis
+#FTP Server
+#static website (not in PHP)
+#adminer
+#another service to choose
