@@ -61,7 +61,7 @@ down :
 	sudo docker compose -f $(SRCS_PATH)docker-compose.yml down
 	@ echo "\n$(GREEN)★ Docker stopped ★$(CEND)\n"
 
-clean : stop
+clean : down
 	@ echo "\n$(YELLOW)★ Cleaning Volumes ★$(CEND)\n"
 	sudo docker volume rm $(WP_NAME) $(MDB_NAME)
 	sudo rm -rf $(VOLUMES_PATH)
