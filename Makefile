@@ -51,8 +51,8 @@ volumes :
 
 up :
 	@ echo "\n$(YELLOW)★ Launching Docker ★$(CEND)\n"
-	sudo docker --version
-	@ echo "\n$(WHITE)	A self-sufficient runtime for containers$(CEND)\n"
+	@ sudo docker --version
+	@ echo "\n$(WHITE) A self-sufficient runtime for containers$(CEND)\n"
 	sudo docker compose -f $(SRCS_PATH)docker-compose.yml up -d --build
 	@ echo "\n$(GREEN)★ Images Ready ★$(CEND)\n"
 
@@ -65,9 +65,9 @@ clean : stop
 	@ echo "\n$(YELLOW)★ Cleaning Volumes ★$(CEND)\n"
 	sudo docker volume rm $(WP_NAME) $(MDB_NAME)
 	sudo rm -rf $(VOLUMES_PATH)
-#	sudo docker volume rm bonus
 	sudo docker system prune -af
 	sudo docker volume prune -af
+#	sudo docker volume rm bonus
 	@ echo "\n$(GREEN)★ Volumes cleaned ★$(CEND)\n"
 
 re : clean all
