@@ -13,23 +13,25 @@ RUN apt install -y nginx openssl
 
 # Assure the existence and access of the certificates folder
 RUN mkdir -p /etc/ssl/private/
-RUN chmod 750 /etc/ssl/private/
+RUN chmod 755 /etc/ssl/private/
 
 # Create and stock with .env variables the SSL certificate-key pair
 RUN openssl req -x509 -sha256 -nodes -newkey rsa:4096 -days 30\
     -subj "/C=FR/ST=IDF/L=Paris/O=42Paris/OU=Inception/CN=ancolmen.42.fr/UID=ancolmen"\
-    -keyout ${NGINX_KEY} -out ${NGINX_CRT}
+    -keyout /etc/ssl/private/nginx_cert.key\
+    -out /etc/ssl/private/nginx_cert.crt
 
 # Copy our configuration and use it as global nginx configuration
 COPY conf/nginx.conf etc/nginx/nginx.conf
 
-# Change env variables in conf file
-RUN sed -i "s|DOMAIN_NAME|${DOMAIN_NAME}|g" /etc/nginx/nginx.conf
-RUN sed -i "s|KEY_PATH|${NGINX_KEY}|g" /etc/nginx/nginx.conf
-RUN sed -i "s|CRT_PATH|${NGINX_CRT}|g" /etc/nginx/nginx.conf
+# # Change env variables in conf file
+# RUN sed -i "s|DOMAIN_NAME|${DOMAIN_NAME}|g" /etc/nginx/nginx.conf
+# RUN sed -i "s|KEY_PATH|${NGINX_KEY}|g" /etc/nginx/nginx.conf
+# RUN sed -i "s|CRT_PATH|${NGINX_CRT}|g" /etc/nginx/nginx.conf
 
 # Give permissions to access and copy the custom index
-RUN chmod 750 /var/www/html
+RUN mkdir -p /var/www/html
+RUN chmod 755 /var/www/html
 COPY tools/indexCustom.html /var/www/html
 
 # Port to listen

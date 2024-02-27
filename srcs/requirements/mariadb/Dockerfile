@@ -14,7 +14,7 @@ RUN apt install -y mariadb-server
 # Assure the existence, access and ownership of mysqld folder
 RUN mkdir -p /var/run/mysqld
 RUN chown -R mysql:mysql /var/run/mysqld
-RUN chmod 750 /var/run/mysqld
+RUN chmod 755 /var/run/mysqld
 
 # Copy our configuration
 COPY conf/mariadb.conf /etc/mysql/mariadb.conf.d/
@@ -23,7 +23,7 @@ COPY conf/mariadb.conf /etc/mysql/mariadb.conf.d/
 COPY tools/scriptMDB.sh .
 
 # Give permissions to the script
-RUN chmod 750 ./scriptMDB.sh
+RUN chmod 755 ./scriptMDB.sh
 
 # Port to listen
 EXPOSE 3306
