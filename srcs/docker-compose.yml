@@ -40,6 +40,8 @@ services:
       - .env
     networks:
       - inception
+    expose:
+      - "3306"
     volumes:
       - mariadb:/var/lib/mysql
     restart: always
@@ -55,6 +57,8 @@ services:
       - .env
     networks:
       - inception
+    expose:
+      - "9000"
     volumes:
       - wordpress:/var/www/html
     depends_on:
@@ -67,11 +71,15 @@ volumes:
     name: mariadb
     driver: local
     driver_opts:
+      type: 'none'
+      o: 'bind'
       device: '/home/ancolmen/data/mariadb'
   wordpress:
     name: wordpress
     driver: local
     driver_opts:
+      type: 'none'
+      o: 'bind'
       device: '/home/ancolmen/data/wordpress'
 
 #Containers (Bonus)

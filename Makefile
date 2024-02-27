@@ -34,19 +34,19 @@ CEND = \033[0m
 
 all : volumes up
 	@ echo "\n$(GREEN)★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★$(CEND)\n"
-	@ echo "\n$(GREEN)★ Welcome to $(NAME) ★$(CEND)\n"
-	@ echo "\n$(WHITE)	nginx set $(CEND)\n"
-	@ echo "\n$(WHITE)	mariadb set $(CEND)\n"
-	@ echo "\n$(WHITE)	wordpress is running at $(NAME).42.fr$(CEND)\n"
+	@ echo "\n$(GREEN)★ Welcome to $(NAME) ★$(CEND)"
+	@ echo "\n$(WHITE)	nginx set $(CEND)"
+	@ echo "\n$(WHITE)	mariadb set $(CEND)"
+	@ echo "\n$(WHITE)	wordpress is running at ancolmen.42.fr$(CEND)"
 	@ echo "$(GREEN)★ Everything is running smoothly ★$(CEND)\n"
-	@ echo "\n$(GREEN)★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★$(CEND)\n"
+	@ echo "\n$(GREEN)★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★$(CEND)"
 
 volumes :
 	@ echo "\n$(YELLOW)★ Creating Docker Volumes ★$(CEND)\n"
 	sudo mkdir -p $(VOLUMES_PATH)/$(MDB_NAME)
-	sudo chmod 755 $(VOLUMES_PATH)/$(MDB_NAME)
+	sudo chmod 777 $(VOLUMES_PATH)/$(MDB_NAME)
 	sudo mkdir -p $(VOLUMES_PATH)/$(WP_NAME)
-	sudo chmod 755 $(VOLUMES_PATH)/$(WP_NAME)
+	sudo chmod 777 $(VOLUMES_PATH)/$(WP_NAME)
 	@ echo "$(GREEN)★ Volumes OK ★$(CEND)\n"
 
 up :
@@ -65,8 +65,8 @@ clean : down
 	@ echo "\n$(YELLOW)★ Cleaning Volumes ★$(CEND)\n"
 	sudo docker volume rm $(WP_NAME) $(MDB_NAME)
 	sudo rm -rf $(VOLUMES_PATH)
-	sudo docker system prune -af
-	sudo docker volume prune -af
+	sudo docker system prune
+	sudo docker volume prune
 #	sudo docker volume rm bonus
 	@ echo "\n$(GREEN)★ Volumes cleaned ★$(CEND)\n"
 
