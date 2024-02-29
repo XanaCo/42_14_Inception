@@ -20,6 +20,15 @@ VOLUMES_PATH = /home/$(USER)/data
 
 MDB_NAME = mariadb
 WP_NAME = wordpress
+NG_NAME = nginx
+
+MDB_IMG = $(shell docker images | grep mariadb | wc -l)
+WP_IMG = $(shell docker images | grep wordpress | wc -l)
+NG_IMG = $(shell docker images | grep nginx | wc -l)
+
+MDB_VOL = $(shell docker volume ls | grep mariadb | wc -l)
+WP_VOL = $(shell docker volume ls | grep wordpress | wc -l)
+
 #OTHERSERVICES_NAME bonus
 
 #######	COLORS #######
@@ -42,34 +51,65 @@ all : volumes up
 	@ echo "\n$(GREEN)★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★$(CEND)"
 
 volumes :
-	@ echo "\n$(YELLOW)★ Creating Docker Volumes ★$(CEND)\n"
-	sudo mkdir -p $(VOLUMES_PATH)/$(MDB_NAME)
-	sudo chmod 777 $(VOLUMES_PATH)/$(MDB_NAME)
-	sudo mkdir -p $(VOLUMES_PATH)/$(WP_NAME)
-	sudo chmod 777 $(VOLUMES_PATH)/$(WP_NAME)
+	@ echo "\n$(YELLOW)★ Creating Docker Volumes ★$(CEND)"
+	@ if [ ! -d "/home/ancolmen/data" ]; \
+	then \
+		sudo mkdir -p $(VOLUMES_PATH)/$(MDB_NAME); \
+		sudo chmod 777 $(VOLUMES_PATH)/$(MDB_NAME); \
+		sudo mkdir -p $(VOLUMES_PATH)/$(WP_NAME); \
+		sudo chmod 777 $(VOLUMES_PATH)/$(WP_NAME); \
+	else \
+		echo "	Volumes already created"; \
+	fi;
 	@ echo "$(GREEN)★ Volumes OK ★$(CEND)\n"
 
 up :
-	@ echo "\n$(YELLOW)★ Launching Docker ★$(CEND)\n"
+	@ echo "\n$(YELLOW)★ Launching Docker ★$(CEND)"
 	@ sudo docker --version
-	@ echo "\n$(WHITE) A self-sufficient runtime for containers$(CEND)\n"
-	sudo docker compose -f $(SRCS_PATH)docker-compose.yml up -d --build
-	@ echo "\n$(GREEN)★ Images Ready ★$(CEND)\n"
+	@ echo "$(WHITE) A self-sufficient runtime for containers$(CEND)"
+	sudo docker compose -f $(SRCS_PATH)docker-compose.yml up -d --pull never
+	@ echo "$(GREEN)★ Images Ready ★$(CEND)\n"
 
 down :
-	@ echo "\n$(YELLOW)★ Stopping Docker ★$(CEND)\n"
+	@ echo "\n$(YELLOW)★ Stopping Docker ★$(CEND)"
 	sudo docker compose -f $(SRCS_PATH)docker-compose.yml down
-	@ echo "\n$(GREEN)★ Docker stopped ★$(CEND)\n"
+	@ echo "$(GREEN)★ Docker stopped ★$(CEND)\n"
+
+re_mdb: down volumes
+	@ sudo docker rmi $(MDB_NAME):42
+	@ sudo docker compose -f $(SRCS_PATH)docker-compose.yml up -d --pull never
+
+re_wp: down volumes
+	@ sudo docker rmi $(WP_NAME):42
+	@ sudo docker compose -f $(SRCS_PATH)docker-compose.yml up -d --pull never
+
+re_ng: down volumes
+	@ sudo docker rmi $(NG_NAME):42
+	@ sudo docker compose -f $(SRCS_PATH)docker-compose.yml up -d --pull never
 
 clean : down
-	@ echo "\n$(YELLOW)★ Cleaning Volumes ★$(CEND)\n"
-	sudo docker volume rm $(WP_NAME) $(MDB_NAME)
+	@ echo "\n$(YELLOW)★ Cleaning Volumes ★$(CEND)"
+
+	@ if [ $(MDB_IMG) = "1" ]; then sudo docker rmi $(MDB_NAME):42; \
+	else echo "	MDB Image already deleted"; fi;
+	@ if [ $(WP_IMG) = "1" ]; then sudo docker rmi $(WP_NAME):42; \
+	else echo "	WP Image already deleted"; fi;
+	@ if [ $(NG_IMG) = "1" ]; then sudo docker rmi $(NG_NAME):42; \
+	else echo "	NG Image already deleted"; fi;
+
+	@ if [ $(MDB_VOL) = "1" ]; then sudo docker volume rm $(MDB_NAME); \
+	else echo "	MDB Volume already deleted"; fi;
+	@ if [ $(WP_VOL) = "1" ]; then sudo docker volume rm $(WP_NAME); \
+	else echo "	WP Volume already deleted"; fi;
+
+	sudo docker system prune -af
+	sudo docker volume prune -f
+
+	@ echo "$(GREEN)★ Volumes cleaned ★$(CEND)\n"
+
+fclean : clean
 	sudo rm -rf $(VOLUMES_PATH)
-	sudo docker system prune
-	sudo docker volume prune
-#	sudo docker volume rm bonus
-	@ echo "\n$(GREEN)★ Volumes cleaned ★$(CEND)\n"
+	
+re : fclean all
 
-re : clean all
-
-.PHONY: all volumes up stop clean re
+.PHONY: all volumes up down clean fclean re re_mdb re_ng re_wp

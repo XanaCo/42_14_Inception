@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [-f "/var/www/html/wp-config.php"]
+if [ -f "/var/www/html/wp-config.php" ];
 then
     echo "Wordpress already set\n"
 else
@@ -11,7 +11,7 @@ else
     wp core config --dbname=$MYSQL_DATABASE\
                     --dbhost=$MYSQL_HOST\
                     --dbuser=$MYSQL_USER\
-                    --dbpass=$MYSQL_PASSWORD\
+                    --dbpass=$MYSQL_PASS\
                     --allow-root
 
 # Installation of wordpress with given parameters

@@ -1,5 +1,4 @@
-
-version: "1.1"
+version: "1.5"
 
 #Custom Network
 networks:
@@ -9,6 +8,42 @@ networks:
 
 #Containers (Mandatory)
 services:
+  mariadb:
+    container_name: mariadb
+    image: mariadb:42
+    init: true
+    build:
+      context: requirements/mariadb
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    networks:
+      - inception
+    expose:
+      - "3306"
+    volumes:
+      - mariadb:/var/lib/mysql/
+    restart: unless-stopped
+
+  wordpress:
+    container_name: wordpress
+    image: wordpress:42
+    init: true
+    build:
+      context: requirements/wordpress
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    networks:
+      - inception
+    expose:
+      - "9000"
+    volumes:
+      - wordpress:/var/www/html/
+    depends_on:
+      - mariadb
+    restart: unless-stopped
+
   nginx:
     container_name: nginx
     image: nginx:42
@@ -26,44 +61,7 @@ services:
       - wordpress:/var/www/html
     depends_on:
       - wordpress
-      - mariadb
-    restart: always
-
-  mariadb:
-    container_name: mariadb
-    image: mariadb:42
-    init: true
-    build:
-      context: requirements/mariadb
-      dockerfile: Dockerfile
-    env_file:
-      - .env
-    networks:
-      - inception
-    expose:
-      - "3306"
-    volumes:
-      - mariadb:/var/lib/mysql
-    restart: always
-
-  wordpress:
-    container_name: wordpress
-    image: wordpress:42
-    init: true
-    build:
-      context: requirements/wordpress
-      dockerfile: Dockerfile
-    env_file:
-      - .env
-    networks:
-      - inception
-    expose:
-      - "9000"
-    volumes:
-      - wordpress:/var/www/html
-    depends_on:
-      - mariadb
-    restart: always
+    restart: on-failure
 
 #List of Volumes
 volumes:
