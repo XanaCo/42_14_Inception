@@ -77,10 +77,12 @@ down :
 
 re_mdb: down volumes
 	@ sudo docker rmi $(MDB_NAME):42
+	@ sudo docker volume rm $(MDB_NAME)
 	@ sudo docker compose -f $(SRCS_PATH)docker-compose.yml up -d --pull never
 
 re_wp: down volumes
 	@ sudo docker rmi $(WP_NAME):42
+	@ sudo docker volume rm $(WP_NAME)
 	@ sudo docker compose -f $(SRCS_PATH)docker-compose.yml up -d --pull never
 
 re_ng: down volumes
