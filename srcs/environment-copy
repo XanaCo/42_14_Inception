@@ -1,0 +1,27 @@
+
+# Domain
+DOMAIN_NAME=ancolmen.42.fr
+
+# Certificates NGINX
+NGINX_KEY=/etc/ssl/private/nginx_cert.key
+NGINX_CRT=/etc/ssl/private/nginx_cert.crt
+
+# MYSQL SETUP
+MYSQL_DATABASE=wordpress
+MYSQL_USER=ancolmen
+MYSQL_PASS=123
+MYSQL_ROOT_PASS=123
+
+# Wordpress SETUP
+WP_URL=ancolmen.42.fr
+WP_TITLE=Inception42
+WP_ADMIN=ancolmen
+WP_ADMIN_PASS=123
+WP_ADMIN_EMAIL=ancolmen@somemail.com
+WP_USER=other_wp
+WP_USER_EMAIL=other@somemail.com
+WP_USER_PASS=123
+
+# FTP SETUP
+FTP_USER=ancolmen_ftp
+FTP_PASS=123
