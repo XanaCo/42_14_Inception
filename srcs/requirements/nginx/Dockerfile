@@ -29,13 +29,18 @@ COPY conf/nginx.conf etc/nginx/nginx.conf
 # RUN sed -i "s|KEY_PATH|${NGINX_KEY}|g" /etc/nginx/nginx.conf
 # RUN sed -i "s|CRT_PATH|${NGINX_CRT}|g" /etc/nginx/nginx.conf
 
-# Give permissions to access and copy the custom index
+# # Give permissions to access and copy the custom index WAS ALREADY IN WP!!!
+# RUN mkdir -p /var/www/html
+# RUN chmod 755 /var/www/html
+# COPY tools/indexCustom.html /var/www/html
+
+# Create var/www/html repertory FROM WP NOW
 RUN mkdir -p /var/www/html
-RUN chmod 755 /var/www/html
-COPY tools/indexCustom.html /var/www/html
+RUN chown -R www-data:www-data /var/www/html
+RUN chmod -R 755 /var/www/html
 
 # Port to listen
 EXPOSE 443
 
-# Default command when container starts
+# Default command when container starts (execute nginx with options)
 CMD ["nginx", "-g", "daemon off;"]

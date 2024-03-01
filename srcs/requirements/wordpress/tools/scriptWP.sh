@@ -7,9 +7,10 @@ else
 # Download main package
     wp core download --allow-root
 
+    sleep 10
 # Configuration of the database parameters
     wp core config --dbname=$MYSQL_DATABASE\
-                    --dbhost=$MYSQL_HOST\
+                    --dbhost="mariadb:3306"\
                     --dbuser=$MYSQL_USER\
                     --dbpass=$MYSQL_PASS\
                     --allow-root

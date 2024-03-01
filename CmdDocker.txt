@@ -1,0 +1,14 @@
+
+//Inside Cont repertory
+docker build -t <image> .
+
+//Inside Cont repertory
+docker run -it <image>
+
+//Effacer all Cont
+docker stop $(docker ps -aq)
+docker rm -f $(docker ps -aq)
+
+//Netoyer
+docker volume prune -af
+docker system prune -f
