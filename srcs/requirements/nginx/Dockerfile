@@ -11,6 +11,9 @@ RUN apt update -y && apt upgrade -y
 # Install NGINX and OPENSSL
 RUN apt install -y nginx openssl
 
+# Clean lists to reduce size of container
+RUN rm -rf /var/lib/apt/lists/*
+
 # Assure the existence and access of the certificates folder
 RUN mkdir -p /etc/ssl/private/
 RUN chmod 755 /etc/ssl/private/

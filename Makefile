@@ -21,15 +21,17 @@ VOLUMES_PATH = /home/$(USER)/data
 MDB_NAME = mariadb
 WP_NAME = wordpress
 NG_NAME = nginx
+RE_NAME = redis
+FTP_NAME = ftp
 
 MDB_IMG = $(shell docker images | grep mariadb | wc -l)
 WP_IMG = $(shell docker images | grep wordpress | wc -l)
 NG_IMG = $(shell docker images | grep nginx | wc -l)
+RE_IMG = $(shell docker images | grep redis | wc -l)
+FTP_IMG = $(shell docker images | grep ftp | wc -l)
 
 MDB_VOL = $(shell docker volume ls | grep mariadb | wc -l)
 WP_VOL = $(shell docker volume ls | grep wordpress | wc -l)
-
-#OTHERSERVICES_NAME bonus
 
 #######	COLORS #######
 
@@ -76,17 +78,25 @@ down :
 	@ echo "$(GREEN)★ Docker stopped ★$(CEND)\n"
 
 re_mdb: down volumes
-	@ sudo docker rmi $(MDB_NAME):42
-	@ sudo docker volume rm $(MDB_NAME)
+	@ if [ $(MDB_IMG) = "1" ]; then sudo docker rmi $(MDB_NAME):42; fi;
+	@ if [ $(MDB_VOL) = "1" ]; then sudo docker volume rm $(MDB_NAME); fi;
 	@ sudo docker compose -f $(SRCS_PATH)docker-compose.yml up -d --pull never
 
 re_wp: down volumes
-	@ sudo docker rmi $(WP_NAME):42
-	@ sudo docker volume rm $(WP_NAME)
+	@ if [ $(WP_IMG) = "1" ]; then sudo docker rmi $(WP_NAME):42; fi;
+	@ if [ $(WP_VOL) = "1" ]; then sudo docker volume rm $(WP_NAME); fi;
 	@ sudo docker compose -f $(SRCS_PATH)docker-compose.yml up -d --pull never
 
 re_ng: down volumes
-	@ sudo docker rmi $(NG_NAME):42
+	@ if [ $(NG_IMG) = "1" ]; then sudo docker rmi $(NG_NAME):42; fi;
+	@ sudo docker compose -f $(SRCS_PATH)docker-compose.yml up -d --pull never
+
+re_re: down volumes
+	@ if [ $(RE_IMG) = "1" ]; then sudo docker rmi $(RE_NAME):42; fi;
+	@ sudo docker compose -f $(SRCS_PATH)docker-compose.yml up -d --pull never
+
+re_ftp: down volumes
+	@ if [ $(FTP_IMG) = "1" ]; then sudo docker rmi $(FTP_NAME):42; fi;
 	@ sudo docker compose -f $(SRCS_PATH)docker-compose.yml up -d --pull never
 
 clean : down
@@ -98,6 +108,11 @@ clean : down
 	else echo "	WP Image already deleted"; fi;
 	@ if [ $(NG_IMG) = "1" ]; then sudo docker rmi $(NG_NAME):42; \
 	else echo "	NG Image already deleted"; fi;
+
+	@ if [ $(RE_IMG) = "1" ]; then sudo docker rmi $(RE_NAME):42; \
+	else echo "	RedisCache Image already deleted"; fi;
+	@ if [ $(FTP_IMG) = "1" ]; then sudo docker rmi $(FTP_NAME):42; \
+	else echo "	FTP Image already deleted"; fi;
 
 	@ if [ $(MDB_VOL) = "1" ]; then sudo docker volume rm $(MDB_NAME); \
 	else echo "	MDB Volume already deleted"; fi;
@@ -114,4 +129,4 @@ fclean : clean
 	
 re : fclean all
 
-.PHONY: all volumes up down clean fclean re re_mdb re_ng re_wp
+.PHONY: all volumes up down clean fclean re re_mdb re_ng re_wp re_re re_ftp

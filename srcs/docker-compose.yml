@@ -61,7 +61,41 @@ services:
       - wordpress:/var/www/html
     depends_on:
       - wordpress
-    restart: on-failure
+    restart: unless-stopped
+  
+  redis:
+    container_name: redis
+    image: redis:42
+    build:
+      context: requirements/bonus/redis
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    networks:
+      - inception
+    volumes:
+      - wordpress:/var/www/html
+    depends_on:
+      - wordpress
+    restart: unless-stopped
+
+  # ftp:
+  #   container_name: ftp
+  #   image: ftp:42
+  #   build:
+  #     context: requirements/bonus/ftp
+  #     dockerfile: Dockerfile
+  #   env_file:
+  #     - .env
+  #   networks:
+  #     - inception
+  #   ports:
+  #     - "21:21"
+  #     - "40000-50000:40000-50000"
+  #   volumes:
+  #     - wordpress:/var/www/html
+  #   restart: unless-stopped
+
 
 #List of Volumes
 volumes:
@@ -81,7 +115,6 @@ volumes:
       device: '/home/ancolmen/data/wordpress'
 
 #Containers (Bonus)
-#redis
 #FTP Server
 #static website (not in PHP)
 #adminer

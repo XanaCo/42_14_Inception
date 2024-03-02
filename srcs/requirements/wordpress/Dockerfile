@@ -12,6 +12,9 @@ RUN apt update -y && apt upgrade -y
 RUN apt install -y wget
 RUN apt install -y php7.4 php-fpm php-mysql mariadb-client
 
+# Clean lists to reduce size of container
+RUN rm -rf /var/lib/apt/lists/*
+
 # Create run/php repertory
 RUN mkdir -p /run/php
 

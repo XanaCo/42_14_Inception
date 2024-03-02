@@ -11,6 +11,9 @@ RUN apt update -y && apt upgrade -y
 # Install MARIADB
 RUN apt install -y mariadb-server
 
+# Clean lists to reduce size of container
+RUN rm -rf /var/lib/apt/lists/*
+
 # Copy our configuration
 COPY conf/mariadb.conf /etc/mysql/mariadb.conf.d/50-server.cnf
 
