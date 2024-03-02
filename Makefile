@@ -23,12 +23,14 @@ WP_NAME = wordpress
 NG_NAME = nginx
 RE_NAME = redis
 FTP_NAME = ftp
+ADM_NAME = adminer
 
 MDB_IMG = $(shell docker images | grep mariadb | wc -l)
 WP_IMG = $(shell docker images | grep wordpress | wc -l)
 NG_IMG = $(shell docker images | grep nginx | wc -l)
 RE_IMG = $(shell docker images | grep redis | wc -l)
 FTP_IMG = $(shell docker images | grep ftp | wc -l)
+ADM_IMG = $(shell docker images | grep adminer | wc -l)
 
 MDB_VOL = $(shell docker volume ls | grep mariadb | wc -l)
 WP_VOL = $(shell docker volume ls | grep wordpress | wc -l)
@@ -49,6 +51,10 @@ all : volumes up
 	@ echo "\n$(WHITE)	nginx set $(CEND)"
 	@ echo "\n$(WHITE)	mariadb set $(CEND)"
 	@ echo "\n$(WHITE)	wordpress is running at ancolmen.42.fr$(CEND)"
+	
+	@ echo "\n$(WHITE)	redis cache set $(CEND)"
+	@ echo "\n$(WHITE)	Adminer running at http://localhost:8080/adminer.php$(CEND)"
+
 	@ echo "$(GREEN)★ Everything is running smoothly ★$(CEND)\n"
 	@ echo "\n$(GREEN)★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★$(CEND)"
 
@@ -97,6 +103,10 @@ re_re: down volumes
 
 re_ftp: down volumes
 	@ if [ $(FTP_IMG) = "1" ]; then sudo docker rmi $(FTP_NAME):42; fi;
+	@ sudo docker compose -f $(SRCS_PATH)docker-compose.yml up -d --pull never
+
+re_adm: down volumes
+	@ if [ $(ADM_IMG) = "1" ]; then sudo docker rmi $(ADM_NAME):42; fi;
 	@ sudo docker compose -f $(SRCS_PATH)docker-compose.yml up -d --pull never
 
 clean : down

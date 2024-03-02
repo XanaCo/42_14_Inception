@@ -94,7 +94,24 @@ services:
   #     - "40000-50000:40000-50000"
   #   volumes:
   #     - wordpress:/var/www/html
+  #     # - wordpress:/home/ancolmen/data/wordpress ??
   #   restart: unless-stopped
+
+  adminer:
+    container_name: adminer
+    image: adminer:42
+    build:
+      context: requirements/bonus/adminer
+      dockerfile: Dockerfile
+    networks:
+      - inception
+    ports:
+      - "8080:8080"
+    volumes:
+      - wordpress:/var/www/html
+    depends_on:
+      - wordpress
+    restart: unless-stopped
 
 
 #List of Volumes
