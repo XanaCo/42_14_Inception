@@ -1,10 +1,27 @@
-version: "1.5"
+version: "3.8"
 
 #Custom Network
 networks:
   inception:
     name: inception
     driver: bridge
+
+#List of Volumes
+volumes:
+  mariadb:
+    name: mariadb
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '/home/ancolmen/data/mariadb'
+  wordpress:
+    name: wordpress
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '/home/ancolmen/data/wordpress'
 
 #Containers (Mandatory)
 services:
@@ -62,6 +79,8 @@ services:
     depends_on:
       - wordpress
     restart: unless-stopped
+
+# BONUS #
   
   redis:
     container_name: redis
@@ -69,8 +88,6 @@ services:
     build:
       context: requirements/bonus/redis
       dockerfile: Dockerfile
-    env_file:
-      - .env
     networks:
       - inception
     volumes:
@@ -79,23 +96,22 @@ services:
       - wordpress
     restart: unless-stopped
 
-  # ftp:
-  #   container_name: ftp
-  #   image: ftp:42
-  #   build:
-  #     context: requirements/bonus/ftp
-  #     dockerfile: Dockerfile
-  #   env_file:
-  #     - .env
-  #   networks:
-  #     - inception
-  #   ports:
-  #     - "21:21"
-  #     - "40000-50000:40000-50000"
-  #   volumes:
-  #     - wordpress:/var/www/html
-  #     # - wordpress:/home/ancolmen/data/wordpress ??
-  #   restart: unless-stopped
+  ftp:
+    container_name: ftp
+    image: ftp:42
+    build:
+      context: requirements/bonus/ftp
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    networks:
+      - inception
+    ports:
+      - "21:21"
+      - "40000-50000:40000-50000"
+    volumes:
+      - wordpress:/var/www/html
+    restart: unless-stopped
 
   adminer:
     container_name: adminer
@@ -105,34 +121,15 @@ services:
       dockerfile: Dockerfile
     networks:
       - inception
-    ports:
-      - "8080:8080"
     volumes:
       - wordpress:/var/www/html
+    ports:
+      - "8080:8080"
     depends_on:
       - wordpress
     restart: unless-stopped
 
 
-#List of Volumes
-volumes:
-  mariadb:
-    name: mariadb
-    driver: local
-    driver_opts:
-      type: 'none'
-      o: 'bind'
-      device: '/home/ancolmen/data/mariadb'
-  wordpress:
-    name: wordpress
-    driver: local
-    driver_opts:
-      type: 'none'
-      o: 'bind'
-      device: '/home/ancolmen/data/wordpress'
-
-#Containers (Bonus)
-#FTP Server
 #static website (not in PHP)
-#adminer
 #another service to choose
+

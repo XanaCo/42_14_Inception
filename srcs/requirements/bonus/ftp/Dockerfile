@@ -32,7 +32,7 @@ EXPOSE 20 21 40000-50000
 ENTRYPOINT ["sh", "/usr/local/bin/scriptFTP.sh"]
 
 
-#WILS:
+# #WILS:
 # FROM debian:bullseye
 
 # RUN apt update && apt install -y vsftpd
@@ -42,4 +42,4 @@ ENTRYPOINT ["sh", "/usr/local/bin/scriptFTP.sh"]
 # RUN mkdir -p /var/run/vsftpd/empty
 # RUN chmod +x ./scriptFTP.sh
 
-#CMD [ "scriptFTP.sh" ]
+# CMD [ "/scriptFTP.sh" ]

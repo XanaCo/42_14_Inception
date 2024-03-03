@@ -50,10 +50,10 @@ all : volumes up
 	@ echo "\n$(GREEN)★ Welcome to $(NAME) ★$(CEND)"
 	@ echo "\n$(WHITE)	nginx set $(CEND)"
 	@ echo "\n$(WHITE)	mariadb set $(CEND)"
-	@ echo "\n$(WHITE)	wordpress is running at ancolmen.42.fr$(CEND)"
-	
+	@ echo "\n$(WHITE)	wordpress is running at https://ancolmen.42.fr $(CEND)"
 	@ echo "\n$(WHITE)	redis cache set $(CEND)"
-	@ echo "\n$(WHITE)	Adminer running at http://localhost:8080/adminer.php$(CEND)"
+	@ echo "\n$(WHITE)	adminer running at http://localhost:8080/adminer.php $(CEND)"
+# @ echo "\n$(WHITE)	ftp set $(CEND)"
 
 	@ echo "$(GREEN)★ Everything is running smoothly ★$(CEND)\n"
 	@ echo "\n$(GREEN)★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★$(CEND)"
@@ -123,6 +123,8 @@ clean : down
 	else echo "	RedisCache Image already deleted"; fi;
 	@ if [ $(FTP_IMG) = "1" ]; then sudo docker rmi $(FTP_NAME):42; \
 	else echo "	FTP Image already deleted"; fi;
+	@ if [ $(ADM_IMG) = "1" ]; then sudo docker rmi $(ADM_NAME):42; \
+	else echo "	adminer Image already deleted"; fi;
 
 	@ if [ $(MDB_VOL) = "1" ]; then sudo docker volume rm $(MDB_NAME); \
 	else echo "	MDB Volume already deleted"; fi;
@@ -139,4 +141,4 @@ fclean : clean
 	
 re : fclean all
 
-.PHONY: all volumes up down clean fclean re re_mdb re_ng re_wp re_re re_ftp
+.PHONY: all volumes up down clean fclean re re_mdb re_ng re_wp re_re re_ftp re_adm

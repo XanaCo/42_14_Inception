@@ -1,5 +1,7 @@
 #!/bin/bash
 
+sleep 20
+
 #Create User
 adduser --disabled-password ${FTP_USER} --gecos ""
 
@@ -15,10 +17,11 @@ echo "${FTP_USER}:${FTP_PASS}" | chpasswd
 echo "${FTP_USER}" | tee -a /etc/vsftpd.userlist
 
 #Start container
-vsftpd /etc/vsftpd.conf
+usr/sbin/vsftpd /etc/vsftpd.conf
+
 
 #WILS:
-#!/bin/sh
+# #!/bin/sh
 
 # #Creation user
 # adduser ${FTP_USER} --disabled-password --gecos ""
