@@ -24,6 +24,7 @@ NG_NAME = nginx
 RE_NAME = redis
 FTP_NAME = ftp
 ADM_NAME = adminer
+CAD_NAME = cadvisor
 
 MDB_IMG = $(shell docker images | grep mariadb | wc -l)
 WP_IMG = $(shell docker images | grep wordpress | wc -l)
@@ -31,6 +32,7 @@ NG_IMG = $(shell docker images | grep nginx | wc -l)
 RE_IMG = $(shell docker images | grep redis | wc -l)
 FTP_IMG = $(shell docker images | grep ftp | wc -l)
 ADM_IMG = $(shell docker images | grep adminer | wc -l)
+CAD_IMG = $(shell docker images | grep cadvisor | wc -l)
 
 MDB_VOL = $(shell docker volume ls | grep mariadb | wc -l)
 WP_VOL = $(shell docker volume ls | grep wordpress | wc -l)
@@ -109,6 +111,10 @@ re_adm: down volumes
 	@ if [ $(ADM_IMG) = "1" ]; then sudo docker rmi $(ADM_NAME):42; fi;
 	@ sudo docker compose -f $(SRCS_PATH)docker-compose.yml up -d --pull never
 
+re_cad: down volumes
+	@ if [ $(CAD_IMG) = "1" ]; then sudo docker rmi $(CAD_NAME):42; fi;
+	@ sudo docker compose -f $(SRCS_PATH)docker-compose.yml up -d --pull never
+
 clean : down
 	@ echo "\n$(YELLOW)★ Cleaning Volumes ★$(CEND)"
 
@@ -125,6 +131,8 @@ clean : down
 	else echo "	FTP Image already deleted"; fi;
 	@ if [ $(ADM_IMG) = "1" ]; then sudo docker rmi $(ADM_NAME):42; \
 	else echo "	adminer Image already deleted"; fi;
+	@ if [ $(CAD_IMG) = "1" ]; then sudo docker rmi $(CAD_NAME):42; \
+	else echo "	cadvisor Image already deleted"; fi;
 
 	@ if [ $(MDB_VOL) = "1" ]; then sudo docker volume rm $(MDB_NAME); \
 	else echo "	MDB Volume already deleted"; fi;
@@ -141,4 +149,4 @@ fclean : clean
 	
 re : fclean all
 
-.PHONY: all volumes up down clean fclean re re_mdb re_ng re_wp re_re re_ftp re_adm
+.PHONY: all volumes up down clean fclean re re_mdb re_ng re_wp re_re re_ftp re_adm re_cad

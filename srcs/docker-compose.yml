@@ -96,23 +96,6 @@ services:
       - wordpress
     restart: unless-stopped
 
-  ftp:
-    container_name: ftp
-    image: ftp:42
-    build:
-      context: requirements/bonus/ftp
-      dockerfile: Dockerfile
-    env_file:
-      - .env
-    networks:
-      - inception
-    ports:
-      - "21:21"
-      - "40000-50000:40000-50000"
-    volumes:
-      - wordpress:/var/www/html
-    restart: unless-stopped
-
   adminer:
     container_name: adminer
     image: adminer:42
@@ -129,7 +112,63 @@ services:
       - wordpress
     restart: unless-stopped
 
+  # ftp:
+  #   container_name: ftp
+  #   image: ftp:42
+  #   build:
+  #     context: requirements/bonus/ftp
+  #     dockerfile: Dockerfile
+  #   env_file:
+  #     - .env
+  #   networks:
+  #     - inception
+  #   ports:
+  #     - "21:21"
+  #     - "15100-15110:15100-15110"
+  #   volumes:
+  #     - wordpress:/var/www/html
+  #   depends_on:
+  #     - nginx
+  #   restart: always
+
+  #WIL:
+  ftp:
+    image: ftp:42
+    container_name: ftp
+    build:
+      context: requirements/bonus/ftp
+    depends_on:
+      - nginx
+    ports:
+      - "21:21"
+      - "15100-15110:15100-15110"
+    volumes:
+      - wordpress:/var/www/html
+    networks: 
+      - inception
+    env_file: 
+      - .env
+    restart: always
 
 #static website (not in PHP)
-#another service to choose
+
+  cadvisor:
+    container_name: cadvisor
+    image: cadvisor:42
+    init: true
+    build:
+      context: requirements/bonus/cadvisor
+      dockerfile: Dockerfile
+    networks:
+      - inception
+    ports:
+      - "8080:8080"
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    restart: always
+
+
 

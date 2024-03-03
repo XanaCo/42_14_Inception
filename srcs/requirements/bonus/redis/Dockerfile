@@ -15,9 +15,6 @@ RUN apt install -y redis-tools
 # Clean lists to reduce size of container
 RUN rm -rf /var/lib/apt/lists/*
 
-RUN sysctl vm.overcommit_memory=1
-RUN echo madvise > /sys/kernel/mm/transparent_hugepage/enabled
-
 # Copy our configuration
 COPY conf/redis.conf /etc/redis/redis.conf
 
