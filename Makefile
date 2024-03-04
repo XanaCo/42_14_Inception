@@ -25,6 +25,7 @@ RE_NAME = redis
 FTP_NAME = ftp
 ADM_NAME = adminer
 CAD_NAME = cadvisor
+STA_NAME = static
 
 MDB_IMG = $(shell docker images | grep mariadb | wc -l)
 WP_IMG = $(shell docker images | grep wordpress | wc -l)
@@ -33,6 +34,7 @@ RE_IMG = $(shell docker images | grep redis | wc -l)
 FTP_IMG = $(shell docker images | grep ftp | wc -l)
 ADM_IMG = $(shell docker images | grep adminer | wc -l)
 CAD_IMG = $(shell docker images | grep cadvisor | wc -l)
+STA_IMG = $(shell docker images | grep static | wc -l)
 
 MDB_VOL = $(shell docker volume ls | grep mariadb | wc -l)
 WP_VOL = $(shell docker volume ls | grep wordpress | wc -l)
@@ -50,12 +52,15 @@ CEND = \033[0m
 all : volumes up
 	@ echo "\n$(GREEN)★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★$(CEND)\n"
 	@ echo "\n$(GREEN)★ Welcome to $(NAME) ★$(CEND)"
+
 	@ echo "\n$(WHITE)	nginx set $(CEND)"
 	@ echo "\n$(WHITE)	mariadb set $(CEND)"
 	@ echo "\n$(WHITE)	wordpress is running at https://ancolmen.42.fr $(CEND)"
+	@ echo "\n$(WHITE)	adminer running at https://localhost/adminer.php $(CEND)"
+	@ echo "\n$(WHITE)	cadvisor running at http://localhost:8080/docker/ $(CEND)"
 	@ echo "\n$(WHITE)	redis cache set $(CEND)"
-	@ echo "\n$(WHITE)	adminer running at http://localhost:8080/adminer.php $(CEND)"
-# @ echo "\n$(WHITE)	ftp set $(CEND)"
+	@ echo "\n$(WHITE)	ftp set $(CEND)"
+	@ echo "\n$(WHITE)	static website set $(CEND)"
 
 	@ echo "$(GREEN)★ Everything is running smoothly ★$(CEND)\n"
 	@ echo "\n$(GREEN)★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★$(CEND)"
@@ -115,6 +120,10 @@ re_cad: down volumes
 	@ if [ $(CAD_IMG) = "1" ]; then sudo docker rmi $(CAD_NAME):42; fi;
 	@ sudo docker compose -f $(SRCS_PATH)docker-compose.yml up -d --pull never
 
+re_sta: down volumes
+	@ if [ $(STA_IMG) = "1" ]; then sudo docker rmi $(STA_NAME):42; fi;
+	@ sudo docker compose -f $(SRCS_PATH)docker-compose.yml up -d --pull never
+
 clean : down
 	@ echo "\n$(YELLOW)★ Cleaning Volumes ★$(CEND)"
 
@@ -133,6 +142,8 @@ clean : down
 	else echo "	adminer Image already deleted"; fi;
 	@ if [ $(CAD_IMG) = "1" ]; then sudo docker rmi $(CAD_NAME):42; \
 	else echo "	cadvisor Image already deleted"; fi;
+	@ if [ $(STA_IMG) = "1" ]; then sudo docker rmi $(STA_NAME):42; \
+	else echo "	static website Image already deleted"; fi;
 
 	@ if [ $(MDB_VOL) = "1" ]; then sudo docker volume rm $(MDB_NAME); \
 	else echo "	MDB Volume already deleted"; fi;
@@ -149,4 +160,4 @@ fclean : clean
 	
 re : fclean all
 
-.PHONY: all volumes up down clean fclean re re_mdb re_ng re_wp re_re re_ftp re_adm re_cad
+.PHONY: all volumes up down clean fclean re re_mdb re_ng re_wp re_re re_ftp re_adm re_cad re_sta

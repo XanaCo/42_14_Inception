@@ -78,10 +78,10 @@ services:
       - wordpress:/var/www/html
     depends_on:
       - wordpress
+      - static
     restart: unless-stopped
 
-#Containers (BONUS)
-  
+#Containers (BONUS)  
   redis:
     container_name: redis
     image: redis:42
@@ -94,7 +94,7 @@ services:
       - wordpress:/var/www/html
     depends_on:
       - wordpress
-    restart: unless-stopped
+    restart: always
 
   adminer:
     container_name: adminer
@@ -129,8 +129,6 @@ services:
       - nginx
     restart: always
 
-#static website (not in PHP)
-
   cadvisor:
     container_name: cadvisor
     image: cadvisor:42
@@ -149,5 +147,15 @@ services:
       - /var/lib/docker/:/var/lib/docker:ro
     restart: always
 
-
-
+  static:
+    container_name: static
+    image: static:42
+    init: true
+    build:
+      context: requirements/bonus/static
+      dockerfile: Dockerfile
+    networks:
+      - inception
+    ports:
+      - "4242:4242"
+    restart: on-failure
