@@ -15,8 +15,13 @@ RUN apt install -y redis-tools
 # Clean lists to reduce size of container
 RUN rm -rf /var/lib/apt/lists/*
 
-# Copy our configuration
-COPY conf/redis.conf /etc/redis/redis.conf
+# Create PID directory
+RUN mkdir -p /run/redis
+RUN chmod 755 /run/redis
+
+# Change current configuration, saving a .bak just in case
+RUN cp /etc/redis/redis.conf /etc/redis/redis.conf.bak
+RUN sed -i 's/bind 127.0.0.1/#bind 127.0.0.1/' /etc/redis/redis.conf
 
 # Port to listen
 EXPOSE 6379

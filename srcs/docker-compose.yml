@@ -80,7 +80,7 @@ services:
       - wordpress
     restart: unless-stopped
 
-# BONUS #
+#Containers (BONUS)
   
   redis:
     container_name: redis
@@ -108,7 +108,7 @@ services:
       - wordpress:/var/www/html
     depends_on:
       - wordpress
-    restart: unless-stopped
+    restart: always
 
   ftp:
     container_name: ftp
