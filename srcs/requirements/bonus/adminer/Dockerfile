@@ -19,8 +19,8 @@ RUN mkdir -p /var/www/adminer/
 RUN mv /usr/share/adminer/* /var/www/adminer
 
 # Port to listen
-EXPOSE 8080
+EXPOSE 3306
 
 # Default when container starts
-CMD ["php", "-S", "0.0.0.0:8080", "-t", "/var/www/adminer/"]
+CMD ["php", "-S", "0.0.0.0:3306", "-t", "/var/www/adminer/"]
 
