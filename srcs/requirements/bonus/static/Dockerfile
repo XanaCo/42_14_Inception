@@ -9,7 +9,7 @@ LABEL version="1.0"
 RUN apt update -y && apt upgrade -y
 
 # Install NGINX and OPENSSL
-RUN apt install -y nodejs openssl
+RUN apt install -y python3 openssl
 
 # Clean lists to reduce size of container
 RUN rm -rf /var/lib/apt/lists/*
@@ -25,11 +25,10 @@ RUN openssl req -x509 -sha256 -nodes -newkey rsa:4096 -days 30\
 
 # Copy files in NGINX directory
 COPY conf/index.html /var/www/html/
-COPY conf/styles.css /var/www/html/
-COPY tools/scriptST.js /tmp/scriptST.js
+COPY tools/server.py /tmp/server.py
 
 # Port to listen
 EXPOSE 4242
 
 # Default command when container starts (execute nginx with options)
-CMD ["node", "/tmp/scriptST.js"]
+CMD ["python3", "/tmp/server.py"]

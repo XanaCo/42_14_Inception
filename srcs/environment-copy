@@ -18,7 +18,7 @@ WP_TITLE=Inception42
 WP_ADMIN=ancolmen
 WP_ADMIN_PASS=123
 WP_ADMIN_EMAIL=ancolmen@somemail.com
-WP_USER=other_wp
+WP_USER=other
 WP_USER_EMAIL=other@somemail.com
 WP_USER_PASS=123
 
