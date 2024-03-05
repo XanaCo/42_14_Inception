@@ -26,5 +26,5 @@ RUN sed -i 's/bind 127.0.0.1/#bind 127.0.0.1/' /etc/redis/redis.conf
 # Port to listen
 EXPOSE 6379
 
-# Default when container starts (execute)
+# Launch redis when container starts
 ENTRYPOINT ["redis-server", "--protected-mode no"]

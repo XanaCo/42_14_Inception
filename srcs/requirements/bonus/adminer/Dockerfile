@@ -18,10 +18,11 @@ RUN rm -rf /var/lib/apt/lists/*
 RUN mkdir -p /var/www/html/
 RUN mv /usr/share/adminer/* /var/www/html/
 
+# Give permissions and ownership
 RUN chmod 755 /var/www/html/adminer.php && chown www-data:www-data /var/www/html/adminer.php
 
 # Port to listen
 EXPOSE 9000
 
-# Default when container starts
+# Start adminer with port 9000
 CMD ["php", "-S", "0.0.0.0:9000", "-t", "/var/www/html/"]

@@ -60,7 +60,7 @@ all : volumes up
 	@ echo "\n$(WHITE)	cadvisor running at http://localhost:8080/docker/ $(CEND)"
 	@ echo "\n$(WHITE)	redis cache set $(CEND)"
 	@ echo "\n$(WHITE)	ftp set $(CEND)"
-	@ echo "\n$(WHITE)	static website set $(CEND)"
+	@ echo "\n$(WHITE)	static website running at http://localhost:4242/ $(CEND)"
 
 	@ echo "$(GREEN)★ Everything is running smoothly ★$(CEND)\n"
 	@ echo "\n$(GREEN)★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★$(CEND)"
