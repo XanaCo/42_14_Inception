@@ -17,7 +17,6 @@ RUN rm -rf /var/lib/apt/lists/*
 # Create an empty repertory for Adminer and move it into it
 RUN mkdir -p /var/www/html/
 RUN mv /usr/share/adminer/* /var/www/html/
-
 RUN chmod 755 /var/www/html/adminer.php && chown www-data:www-data /var/www/html/adminer.php
 
 # Port to listen
