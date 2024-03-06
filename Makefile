@@ -56,6 +56,7 @@ all : volumes up
 	@ echo "\n$(WHITE)	nginx set $(CEND)"
 	@ echo "\n$(WHITE)	mariadb set $(CEND)"
 	@ echo "\n$(WHITE)	wordpress is running at https://ancolmen.42.fr $(CEND)"
+	
 	@ echo "\n$(WHITE)	adminer running at https://localhost/adminer.php $(CEND)"
 	@ echo "\n$(WHITE)	cadvisor running at http://localhost:8080/docker/ $(CEND)"
 	@ echo "\n$(WHITE)	redis cache set $(CEND)"

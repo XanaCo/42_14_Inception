@@ -21,5 +21,5 @@ WORKDIR /usr/local/bin
 RUN wget https://github.com/google/cadvisor/releases/download/v0.39.0/cadvisor
 RUN chmod 755 cadvisor
 
-# Launch cadvisor
+# Default when container starts
 ENTRYPOINT ["cadvisor"]

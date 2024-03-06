@@ -28,5 +28,5 @@ RUN mkdir -p /var/run/vsftpd/empty
 # Port to listen
 EXPOSE 20 21 15100-15110
 
-# Default command when container starts (execute script)
+# Default when container starts
 CMD ["sh", "/usr/local/bin/scriptFTP.sh"]
